@@ -86,7 +86,7 @@ cd web
 npx partykit deploy
 ```
 
-Note the hostname (e.g. `ingenuity.<user>.partykit.dev`). Set **the same** value in your frontend environment as `VITE_PARTYKIT_HOST` (no `ws://` prefix — `partysocket` adds the protocol).
+Note the hostname (e.g. `ingenuity.ikknight.partykit.dev`). Set **the same** value in your frontend environment as `VITE_PARTYKIT_HOST` (no `ws://` prefix — `partysocket` adds the protocol).
 
 Rebuild the frontend after changing env vars so `import.meta.env.VITE_PARTYKIT_HOST` is inlined.
 
