@@ -319,7 +319,9 @@ export default class IngenuityRoom implements Party.Server {
     });
 
     this.standings = rows.map((r, i) => ({ ...r, rank: i + 1 }));
-    this.room.broadcast(JSON.stringify(this.buildSnapshot()));
+    for (const [id] of this.players) {
+      this.sendTo(id, this.buildSnapshot(id));
+    }
   }
 
   private whisperError(connectionId: string, message: string) {
@@ -332,7 +334,9 @@ export default class IngenuityRoom implements Party.Server {
 
   private broadcastSnapshot() {
     if (this.tickTimer()) return;
-    this.room.broadcast(JSON.stringify(this.buildSnapshot()));
+    for (const [id] of this.players) {
+      this.sendTo(id, this.buildSnapshot(id));
+    }
   }
 
   private sendTo(connectionId: string, msg: ServerMessage) {
@@ -383,3 +387,5 @@ export default class IngenuityRoom implements Party.Server {
     };
   }
 }
+
+export default IngenuityRoom satisfies Party.Worker;
