@@ -1,0 +1,29 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:full": "concurrently -k \"vite\" \"partykit dev -p 1999\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "party": "partykit dev -p 1999"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.2.1",
+    "partykit": "^0.0.115",
+    "tailwindcss": "^4.2.2",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.8"
+  },
+  "dependencies": {
+    "partysocket": "^1.1.16",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  }
+}

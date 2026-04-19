@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Trial of Ingenuity</title>
+        <link rel="icon" type="image/x-icon" href="icon/favicon.ico">
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #2c2c2c;
+                overflow: hidden;
+                transition: 0.2s;
+            }
+
+            .container {
+                position: relative;
+                width: 30vw;
+                height: 30vh;
+                margin-bottom: 20px;
+                margin-left: auto;
+                margin-right: auto;
+                left: 4.3%;
+            }
+
+            .button {
+                position: absolute;
+                width: 6.5vh;
+                height: 6.5vh;
+                border: none;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 1vw;
+                color: rgb(255, 255, 255);
+                transition: 0.2s;
+                top: 15vh
+            }
+
+            .button.green {
+                background-color: rgb(0, 160, 139);
+                top: 15vh;
+            }
+
+            .button.green:hover,.button.red:hover,.button.yellow:hover {
+                background-color: rgb(5, 92, 80);
+                top: 15vh;
+            }
+
+            .button.green:active,.button.red:active,.button.yellow:active {
+                background-color: rgb(4, 65, 56);
+            }
+
+            .button.red {
+                background-color: rgb(0, 160, 139);
+                top: 15vh;
+                left: 22vw;
+            }
+
+            .button.yellow {
+                background-color: rgb(0, 160, 139);
+            }
+
+            .center-button {
+                top: 15vh;
+                left: 10vw;
+                width: 10vh;
+                height: 7vh;
+            }
+
+            #leftButton1 {
+                transform: translateX(-9vh);
+            }
+
+            #leftButton2 {
+                transform: translateY(-9vh);
+            }
+
+            #leftButton3 {
+                transform: translateY(9vh);
+            }
+
+            #leftButton4 {
+                transform: translateX(9vh);
+            }
+
+            #rightButton1 {
+                transform: translateX(calc(22vw + 9vh)); /*22 to move to the right, then +4vw to its position */
+            }
+
+            #rightButton2 {
+                transform: translate(22vw, -9vh);
+            }
+
+            #rightButton3 {
+                transform: translate(22vw, 9vh);
+            }
+
+            #rightButton4 {
+                transform: translateX(calc(22vw - 9vh));
+            }
+
+            .bottom-buttons {
+                display: flex;
+                gap: 1vw;
+                margin-top: 2vh;
+            }
+
+            .control-button {
+                padding: 1vh 2vh;
+                font-size: 1.5vh;
+                cursor: pointer;
+                border: none;
+                border-radius: 15px;
+                background-color: #007BFF;
+                color: white;
+                transition: background-color 0.3s;
+            }
+
+            .control-button:hover {
+                background-color: #0056b3;
+            }
+
+            .copy-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1vh;
+                padding: 2vh;
+            }
+
+            .copy {
+                height: 5vh;
+                width: 5vh;
+                background-color: #002f94;
+                border: 1px solid #002f94;
+                border-radius: 3px;
+                padding: 1vh;
+                text-align: center;
+                cursor: pointer;
+                transition: 0.2s;
+                font-size: 3vh;
+            }
+
+            .copy:hover {
+                background-color: rgb(0, 33, 105);
+            }
+
+            .copy:active {
+                background-color: rgb(0, 26, 82);
+            }
+
+            #popup-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                padding: 2vh;
+                /* Add padding to create space around the popup */
+                background-color: rgba(0, 0, 0, 0.5);
+                display: none;
+                transition: 0.8s;
+            }
+
+            #popup {
+                position: relative;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #fff;
+                padding: 20px;
+                width: 500px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            }
+
+            #popup-title {
+                font-weight: bold;
+                margin-top: 0;
+            }
+
+            #popup-message {
+                margin-bottom: 20px;
+            }
+
+            #popup-progress {
+                font-size: 14px;
+                color: #666;
+            }
+
+            #popup-close {
+                background-color: #4CAF50;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                border-radius: 10px;
+                box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+            }
+
+            #popup-close:hover {
+                background-color: #3e8e41;
+            }
+            .water {
+                position: absolute;
+                border: none;
+                border-radius: 5px;
+                cursor: default;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 1vw;
+                background-color: blue;
+                transition: 0.2s;
+                transform-origin: center left;
+                z-index:-1;
+                width: 7vh;
+                height: 1vh;
+                transition: clip-path 0.3s ease-in-out;
+                clip-path: inset(0 0 0 0);
+            }
+            #leftWater1 {
+                transform: translate(3.2vh, 17.8vh) rotate(180deg);
+            }
+            #leftWater2 {
+                transform: translate(3.2vh, 17.8vh) rotate(-90deg);
+            }
+            #leftWater3 {
+                transform: translate(3.2vh, 17.8vh) rotate(90deg);
+            }
+            #leftWater4 {
+                transform: translate(3.2vh, 17.8vh) rotate(0deg);
+            }
+            #rightWater1 {
+                transform: translate(46.6vh,17.8vh) rotate(0deg);
+            }
+            #rightWater2 {
+                transform: translate(46.6vh,17.8vh) rotate(-90deg);
+            }
+            #rightWater3 {
+                transform: translate(46.6vh,17.8vh) rotate(90deg);
+            }
+            #rightWater4 {
+                transform: translate(46.6vh,17.8vh) rotate(180deg);
+            }
+            .waterHide {
+                clip-path: inset(0 100% 0 0);
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <button class="button green" id="greenButton" onclick="rotateLeftButtons();">Left</button>
+            <button class="button red" id="redButton" onclick="rotateRightButtons();">Right</button>
+            <button class="button yellow left-button" id="leftButton1" onclick="insertSymbol('leftButton1')">┌</button>
+            <div class="water" id="leftWater1"></div>
+            <button class="button yellow left-button" id="leftButton2" onclick="insertSymbol('leftButton2')" >┐</button>
+            <div class="water" id="leftWater2"></div>
+            <button class="button yellow left-button" id="leftButton3" onclick="insertSymbol('leftButton3')">||</button>
+            <div class="water" id="leftWater3"></div>
+            <button class="button yellow left-button" id="leftButton4" onclick="insertSymbol('leftButton4')">┘</button>
+            <div class="water" id="leftWater4"></div>
+            <button class="button yellow right-button" id="rightButton1" onclick="insertSymbol('rightButton1')">=</button>
+            <div class="water" id="rightWater1"></div>
+            <button class="button yellow right-button" id="rightButton2" onclick="insertSymbol('rightButton2')">||</button>
+            <div class="water" id="rightWater2"></div>
+            <button class="button yellow right-button" id="rightButton3" onclick="insertSymbol('rightButton3')">┘</button>
+            <div class="water" id="rightWater3"></div>
+            <button class="button yellow right-button" id="rightButton4" onclick="insertSymbol('rightButton4')">└</button>
+            <div class="water" id="rightWater4"></div>
+            <button class="button yellow center-button" id="centerButton" onclick="swapButtons();">Swap</button>
+            
+        </div>
+
+        <div class="bottom-buttons">
+            <button class="control-button" onclick="sendMoves();">Send Moves</button>
+            <button class="control-button" onclick="clearMoves();">Clear Moves</button>
+            <button class="control-button" onclick="runRandomMoves();">Random Moves</button>
+            <button class="control-button solve-button" id="solveButton" onclick="toggleSolve();">Show Solution</button>
+            <button class="control-button solve-button" id="findSolutionButton" onclick="findSolution();">Find Solution</button>
+        </div>
+        <div class="copy-grid">
+            <div class="copy" onclick="setTo('└');">└</div>
+            <div class="copy" onclick="setTo('┌');">┌</div>
+            <div class="copy" onclick="setTo('┘');">┘</div>
+            <div class="copy" onclick="setTo('=');">=</div>
+            <div class="copy" onclick="setTo('||');">||</div>
+            <div class="copy" onclick="setTo('┐');">┐</div>
+            <div class="copy" style="font-size:100%; line-height:230%;" onclick="StartStates(true);">Reset</div>
+        </div>
+        <div id="popup-container">
+            <div id="popup">
+                <h2 id="popup-title">Solution</h2>
+                <p id="popup-message"></p>
+                <button id="popup-close">Close</button>
+            </div>
+        </div>
+        <script>
+
+            document.querySelectorAll('.copy').forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.textContent;
+                    if (content == "Reset") {return}
+                    navigator.clipboard.writeText(content).then(() => {
+                        console.log(`Copied: ${content}`);
+                    }).catch(err => console.error('Failed to copy text:', err));
+                });
+            });
+
+
+
+            let moves = [];
+            let initialStates = {
+                leftButton1: '=',
+                leftButton2: '||',
+                leftButton3: '||',
+                leftButton4: '┘',
+                rightButton1: '=',
+                rightButton2: '┌',
+                rightButton3: '┘',
+                rightButton4: '└'
+            };
+
+            let currentStates = {};
+            let tempStates = {};
+
+            // do the editing thing
+            let symbolVar
+            function insertSymbol(value) {
+                symbolVar = value;
+                console.log(symbolVar);
+            }
+
+            function setTo(value) {
+                document.getElementById(symbolVar).innerHTML = value;
+                checkWater();
+            }
+
+            // Save current states
+            function saveCurrentStates() {
+                return {
+                    leftButton1: document.getElementById('leftButton1').innerText,
+                    leftButton2: document.getElementById('leftButton2').innerText,
+                    leftButton3: document.getElementById('leftButton3').innerText,
+                    leftButton4: document.getElementById('leftButton4').innerText,
+                    rightButton1: document.getElementById('rightButton1').innerText,
+                    rightButton2: document.getElementById('rightButton2').innerText,
+                    rightButton3: document.getElementById('rightButton3').innerText,
+                    rightButton4: document.getElementById('rightButton4').innerText,
+                };
+            }
+
+            // Initialize the buttons with the starting states
+            function StartStates(state) {
+                document.getElementById('leftButton1').innerText = '=';
+                document.getElementById('leftButton2').innerText = '||';
+                document.getElementById('leftButton3').innerText = '||';
+                document.getElementById('leftButton4').innerText = '┘';
+                document.getElementById('rightButton1').innerText = '=';
+                document.getElementById('rightButton2').innerText = '┌';
+                document.getElementById('rightButton3').innerText = '┘';
+                document.getElementById('rightButton4').innerText = '└';
+                if (state) {
+                    checkWater(); 
+                    symbolVar = '';
+                }
+            }
+            StartStates();
+
+            // Restore specific states
+            function restoreStates(states) {
+                document.getElementById('leftButton1').innerText = states.leftButton1;
+                document.getElementById('leftButton2').innerText = states.leftButton2;
+                document.getElementById('leftButton3').innerText = states.leftButton3;
+                document.getElementById('leftButton4').innerText = states.leftButton4;
+                document.getElementById('rightButton1').innerText = states.rightButton1;
+                document.getElementById('rightButton2').innerText = states.rightButton2;
+                document.getElementById('rightButton3').innerText = states.rightButton3;
+                document.getElementById('rightButton4').innerText = states.rightButton4;
+            }
+
+            // Swap buttons
+            function swapButtons() {
+                const leftButton2 = document.getElementById('leftButton1');
+                const leftButton4 = document.getElementById('leftButton4');
+                const rightButton2 = document.getElementById('rightButton1');
+                const rightButton4 = document.getElementById('rightButton4');
+
+                // Swap text of right4 with left2
+                let tempText = rightButton4.innerText;
+                rightButton4.innerText = leftButton2.innerText;
+                leftButton2.innerText = tempText;
+
+                // Swap text of left4 with right2
+                tempText = leftButton4.innerText;
+                leftButton4.innerText = rightButton2.innerText;
+                rightButton2.innerText = tempText;
+
+                moves.push('Swap');
+                //console.log('Swap');
+                checkWater();
+            }
+
+            // Rotate left buttons
+            function rotateLeftButtons() {
+                const leftButton1 = document.getElementById('leftButton1');
+                const leftButton2 = document.getElementById('leftButton2');
+                const leftButton3 = document.getElementById('leftButton3');
+                const leftButton4 = document.getElementById('leftButton4');
+
+                const leftWater1 = document.getElementById('leftWater1');
+                const leftWater2 = document.getElementById('leftWater2');
+                const leftWater3 = document.getElementById('leftWater3');
+                const leftWater4 = document.getElementById('leftWater4');
+
+                // Get current texts
+                let texts = [
+                    leftButton1.innerText,
+                    leftButton2.innerText,
+                    leftButton3.innerText,
+                    leftButton4.innerText
+                ];
+
+                // Apply rotated texts
+                leftButton1.innerText = texts[1];
+                leftButton2.innerText = texts[2];
+                leftButton3.innerText = texts[3];
+                leftButton4.innerText = texts[0];
+
+                moves.push('Rotate Left');
+                //console.log('Rotate Left');
+                checkWater();
+            }
+            
+
+            // Rotate right buttons
+            function rotateRightButtons() {
+                const rightButton1 = document.getElementById('rightButton1');
+                const rightButton2 = document.getElementById('rightButton2');
+                const rightButton3 = document.getElementById('rightButton3');
+                const rightButton4 = document.getElementById('rightButton4');
+
+                const rightWater1 = document.getElementById('rightWater1');
+                const rightWater2 = document.getElementById('rightWater2');
+                const rightWater3 = document.getElementById('rightWater3');
+                const rightWater4 = document.getElementById('rightWater4');
+
+
+                // Get current texts
+                let buttons = [
+                    rightButton1.innerText,
+                    rightButton2.innerText,
+                    rightButton3.innerText,
+                    rightButton4.innerText
+                ];
+
+
+                // Apply rotated texts
+                rightButton1.innerText = buttons[1];
+                rightButton2.innerText = buttons[3];
+                rightButton3.innerText = buttons[0];
+                rightButton4.innerText = buttons[2];
+
+                moves.push('Rotate Right');
+                //console.log('Rotate Right');
+                checkWater();
+            }
+            
+            function checkWater() {
+                const rightButton1 = document.getElementById('rightButton1');
+                const rightButton2 = document.getElementById('rightButton2');
+                const rightButton3 = document.getElementById('rightButton3');
+                const rightButton4 = document.getElementById('rightButton4');
+                const leftButton1 = document.getElementById('leftButton1');
+                const leftButton2 = document.getElementById('leftButton2');
+                const leftButton3 = document.getElementById('leftButton3');
+                const leftButton4 = document.getElementById('leftButton4');
+
+                const rightWater1 = document.getElementById('rightWater1');
+                const rightWater2 = document.getElementById('rightWater2');
+                const rightWater3 = document.getElementById('rightWater3');
+                const rightWater4 = document.getElementById('rightWater4');
+                const leftWater1 = document.getElementById('leftWater1');
+                const leftWater2 = document.getElementById('leftWater2');
+                const leftWater3 = document.getElementById('leftWater3');
+                const leftWater4 = document.getElementById('leftWater4');
+                
+                // left water check
+                if (leftButton1.innerText == "=" || leftButton1.innerText == "┌") {
+                    toggleWater(leftWater1, true);
+                } else {
+                    toggleWater(leftWater1, false);
+                }
+
+                if (leftButton2.innerText == "||" || leftButton2.innerText == "┐") {
+                    toggleWater(leftWater2, true);
+                } else {
+                    toggleWater(leftWater2, false);
+                }
+
+                if (leftButton3.innerText == "||" || leftButton3.innerText == "└") {
+                    toggleWater(leftWater3, true);
+                } else {
+                    toggleWater(leftWater3, false);
+                } 
+                if (leftButton4.innerText == "┘") {
+                    toggleWater(leftWater4, true);
+                } else {
+                    toggleWater(leftWater4, false);
+                } 
+                
+                // right water check
+                if (rightButton1.innerText == "=" || rightButton1.innerText == "┐") {
+                    toggleWater(rightWater1, true);
+                } else {
+                    toggleWater(rightWater1, false);
+                }
+
+                if (rightButton2.innerText == "┌" || rightButton2.innerText == "||") {
+                    toggleWater(rightWater2, true);
+                } else {
+                    toggleWater(rightWater2, false);
+                }
+
+                if (rightButton3.innerText == "┘" || rightButton3.innerText == "||") {
+                    toggleWater(rightWater3, true);
+                } else {
+                    toggleWater(rightWater3, false);
+                } 
+                if (rightButton4.innerText == "└") {
+                    toggleWater(rightWater4, true);
+                } else {
+                   toggleWater(rightWater4, false);
+                } 
+            }
+
+            function toggleWater(water, state) {
+                if (!state) {
+                    // Reset the style specifically, don't reset everything
+                    water.style.clipPath = ''; // Reset clip-path
+                    water.classList.add("waterHide");
+                } else {
+                    if (!water.classList.contains('waterHide')) {
+                        return; // If it's already visible, exit and do nothing
+                        console.log("stopped");
+                    }
+                    water.style.transition = "none"; // Remove any transition for immediate reset
+                    water.classList.remove("waterHide");
+                    water.style.clipPath = "inset(0 0 0 100%)"; // Start the appearance from left
+
+                    // Force reflow (trick to restart the animation)
+                    void water.offsetWidth;
+
+                    // Apply transition and clip-path for smooth appearance
+                    water.style.transition = "clip-path 0.3s ease-in-out";
+                    water.style.clipPath = "inset(0 0 0 0)"; // Final visible state
+                }
+            }
+
+            // Send moves
+            function sendMoves() {
+                console.log('Moves:', moves);
+                // Add your logic to send moves to a server or process them as needed
+            }
+
+            // Clear moves
+            function clearMoves() {
+                moves = [];
+                console.log('Moves cleared');
+            }
+
+            // Run random moves
+            function runRandomMoves() {
+                let lastMove = '';
+                let lastLastMove = '';
+                let maxLength = Math.floor(Math.random() * 75) + 1; // Random length between 1 and 75
+                let i = 0;
+
+                while (i < maxLength) {
+                    let randomMove = Math.floor(Math.random() * 3);
+
+                    if (randomMove === 2 && lastMove === 'Swap' && lastLastMove === 'Swap') {
+                        // If two swaps in a row, add two extra moves
+                        for (let j = 0; j < 2; j++) {
+                            let extraMove = Math.floor(Math.random() * 2);
+                            switch (extraMove) {
+                                case 0:
+                                    rotateLeftButtons();
+                                    lastLastMove = lastMove;
+                                    lastMove = 'Rotate Left';
+                                    break;
+                                case 1:
+                                    rotateRightButtons();
+                                    lastLastMove = lastMove;
+                                    lastMove = 'Rotate Right';
+                                    break;
+                            }
+                        }
+                    } else {
+                        switch (randomMove) {
+                            case 0:
+                                rotateLeftButtons();
+                                lastLastMove = lastMove;
+                                lastMove = 'Rotate Left';
+                                break;
+                            case 1:
+                                rotateRightButtons();
+                                lastLastMove = lastMove;
+                                lastMove = 'Rotate Right';
+                                break;
+                            case 2:
+                                swapButtons();
+                                lastLastMove = lastMove;
+                                lastMove = 'Swap';
+                                break;
+                        }
+                        i++;
+                    }
+                }
+            }
+
+            function toggleSolve() {
+                const solveButton = document.getElementById('solveButton');
+
+                if (solveButton.innerText === 'Show Solution') {
+                    // Save current state and find solution
+                    tempStatesToggle = saveCurrentStates();
+                    StartStates();
+                    solveButton.innerText = 'Show Own Position';
+                } else {
+                    // Restore saved state
+                    restoreStates(tempStatesToggle);
+                    solveButton.innerText = 'Show Solution';
+                }
+            }
+
+            document.getElementById('popup-close').addEventListener('click', () => {
+                document.getElementById('popup-container').style.opacity = 0; // hide the popup with a transition effect
+                setTimeout(() => {
+                    document.getElementById('popup-container').style.display = 'none';
+                }, 300); // wait for the transition to finish
+            });
+
+
+
+            let threadCount = 0;
+
+            function createWorker(script) {
+                const worker = new Worker(script);
+
+                // Increment thread count when a worker is created
+                threadCount++;
+                console.log(`Threads running: ${threadCount}`);
+
+                // Decrement thread count when a worker is terminated
+                worker.onmessage = event => {
+                    if (event.data === 'terminate') {
+                        worker.terminate();
+                        threadCount--;
+                        console.log(`Threads running: ${threadCount}`);
+                    }
+                };
+
+                return worker;
+            }
+
+            // Example worker script (inline for demo purposes)
+            const workerScript = `
+    onmessage = function(event) {
+        if (event.data === 'start') {
+            // Simulate some work
+            console.log('Worker is doing work...');
+            setTimeout(() => {
+                postMessage('terminate'); // Notify main thread to terminate this worker
+            }, 2000); // Simulated work time
+        }
+    };
+`;
+            async function findSolution() {
+                document.getElementById('popup-container').style.display = 'block';
+                document.getElementById("popup-container").style.opacity = "1";
+                document.getElementById('popup-message').innerHTML = `Solving...`;
+                await new Promise(resolve => setTimeout(resolve, 100));
+
+                const startTime = performance.now();
+                tempStates = saveCurrentStates();
+                let queue = [];
+                let visited = new Set();
+                let threadsCount = 0;
+
+                const initialState = {
+                    state: saveCurrentStates(),
+                    path: [],
+                    cost: 0,
+                };
+
+                queue.push(initialState);
+                visited.add(JSON.stringify(initialState.state));
+
+                while (queue.length > 0) {
+                    queue.sort((a, b) => a.cost - b.cost); // Sort by cost
+                    const current = queue.shift();
+                    const { state, path, cost } = current;
+
+                    // If the solution is found
+                    if (JSON.stringify(state) === JSON.stringify(initialStates)) {
+                        const endTime = performance.now();
+                        const timeTaken = (endTime - startTime) / 1000;
+
+                        const compressedPath = compressConsecutiveMoves(path);
+                        document.getElementById('popup-message').innerHTML = `
+        Solution: ${compressedPath.join(', ')}<br>
+        Time taken: ${timeTaken.toFixed(2)} seconds<br>
+        Threads Used: ${threadsCount}
+      `;
+                        restoreStates(tempStates);
+                        return;
+                    }
+
+                    restoreStates(state);
+
+                    // Generate possible moves
+                    const moves = [
+                        { move: 'L', action: rotateLeftButtons },
+                        { move: 'R', action: rotateRightButtons },
+                        { move: 'B', action: swapButtons },
+                    ];
+
+                    for (const { move, action } of moves) {
+                        action();
+                        const newState = saveCurrentStates();
+                        if (!visited.has(JSON.stringify(newState))) {
+                            queue.push({ state: newState, path: [...path, move], cost: cost + 1 });
+                            visited.add(JSON.stringify(newState));
+                            threadsCount++;
+                        }
+                        restoreStates(state); // Undo the move
+                    }
+                }
+
+                // No solution found
+                document.getElementById('popup-message').innerHTML = `
+    No solution found.<br>
+    Threads Used: ${threadsCount}
+  `;
+                restoreStates(tempStates);
+            }
+
+            // Compress consecutive moves into a shorter format
+            function compressConsecutiveMoves(path) {
+                const result = [];
+                let count = 1;
+
+                for (let i = 1; i < path.length; i++) {
+                    if (path[i] === path[i - 1]) {
+                        count++;
+                    } else {
+                        if (count > 1) result.push(`${count}${path[i - 1]}`);
+                        else result.push(path[i - 1]);
+                        count = 1;
+                    }
+                }
+
+                if (count > 1) result.push(`${count}${path[path.length - 1]}`);
+                else result.push(path[path.length - 1]);
+
+                return result;
+            }
+
+
+
+            // Function to compress consecutive "L" or "R" moves into "2L", "3L", etc.
+            function compressConsecutiveMoves(path) {
+                let result = [];
+                let count = 1;
+
+                for (let i = 1; i < path.length; i++) {
+                    if (path[i] === path[i - 1]) {
+                        count++;
+                    } else {
+                        if (count > 1) {
+                            result.push(`${count}${path[i - 1]}`);
+                        } else {
+                            result.push(path[i - 1]);
+                        }
+                        count = 1;  // Reset count for the new move
+                    }
+                }
+
+                // Add the last move
+                if (count > 1) {
+                    result.push(`${count}${path[path.length - 1]}`);
+                } else {
+                    result.push(path[path.length - 1]);
+                }
+
+                return result;
+            }
+
+            // Create a Blob URL for the worker script
+            const blob = new Blob([workerScript], { type: 'application/javascript' });
+            const blobURL = URL.createObjectURL(blob);
+
+            // Create and start a worker
+            const worker = createWorker(blobURL);
+            worker.postMessage('start');
+
+            // Create another worker for demonstration
+            const worker2 = createWorker(blobURL);
+            worker2.postMessage('start');
+
+        </script>
+    </body>
+
+</html>

@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  --color-ink: #0c1222;
+  --color-mist: #8b9bb8;
+  --color-panel: rgba(15, 23, 42, 0.72);
+  --color-accent: #14b8a6;
+  --color-accent-dim: #0d9488;
+  --color-danger: #f43f5e;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply min-h-screen antialiased text-slate-100 font-[family-name:var(--font-display)];
+    background:
+      radial-gradient(1200px 800px at 10% -10%, rgba(20, 184, 166, 0.18), transparent),
+      radial-gradient(900px 600px at 90% 0%, rgba(99, 102, 241, 0.12), transparent),
+      linear-gradient(180deg, #070b14 0%, #0b1224 40%, #070b14 100%);
+  }
+}
+
+@layer utilities {
+  .water-bar {
+    @apply absolute rounded-sm bg-gradient-to-r from-sky-500/90 to-cyan-400/90 transition-[clip-path] duration-300 ease-in-out;
+    width: 1.75rem;
+    height: 0.25rem;
+    transform-origin: center left;
+    z-index: 0;
+  }
+  .water-bar.hide {
+    clip-path: inset(0 100% 0 0);
+  }
+}
