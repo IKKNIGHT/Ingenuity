@@ -388,4 +388,4 @@ export default class IngenuityRoom implements Party.Server {
   }
 }
 
-
+export default IngenuityRoom satisfies Party.Worker;
