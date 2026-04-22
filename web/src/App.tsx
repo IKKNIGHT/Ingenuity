@@ -33,8 +33,7 @@ export function App() {
               Trial of Ingenuity
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-slate-400">
-              Rotate two rings of runes, swap opposing pairs, and restore the hidden pattern. No
-              auto-solver — only your moves count.
+              Rotate two rings of runes, swap opposing pairs, and restore the hidden pattern.
             </p>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
@@ -101,14 +100,7 @@ export function App() {
                 </div>
               </div>
               <p className="mt-4 text-xs leading-relaxed text-slate-500">
-                Local dev: run{" "}
-                <code className="rounded bg-black/40 px-1.5 py-0.5 font-mono text-teal-200/90">
-                  npm run dev:full
-                </code>{" "}
-                (Vite + PartyKit on port 1999). The client connects to{" "}
-                <code className="font-mono">127.0.0.1:1999</code> unless you set{" "}
-                <code className="font-mono">VITE_PARTYKIT_HOST</code>. For production, set that env var to
-                your PartyKit deploy host.
+                Note: Multiplayer is in early access. Expect some rough edges and occasional bugs.
               </p>
             </div>
 

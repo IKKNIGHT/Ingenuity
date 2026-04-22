@@ -24,7 +24,7 @@ export function PuzzleBoard({ state, onMove, disabled, readOnly, compact }: Prop
   const cluster = compact ? "h-[9.5rem] w-[9.5rem] sm:h-44 sm:w-44" : "h-44 w-44 sm:h-52 sm:w-52";
 
   return (
-    <div className="relative mx-auto flex max-w-4xl flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+    <div className={`relative mx-auto flex ${readOnly ? "w-full" : "max-w-4xl"} flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4`}>
       <DiamondCluster
         className={cluster}
         variant="left"
@@ -114,18 +114,24 @@ function DiamondCluster({
       <svg
         className="pointer-events-none absolute inset-0 z-0 h-full w-full"
         viewBox="0 0 100 100"
-        preserveAspectRatio="xMidYMid meet"
+        preserveAspectRatio="none"
         aria-hidden
       >
         <WaterLine active={water.west} x1={50} y1={50} x2={14} y2={50} />
         <WaterLine active={water.north} x1={50} y1={50} x2={50} y2={14} />
         <WaterLine active={water.south} x1={50} y1={50} x2={50} y2={86} />
         <WaterLine active={water.east} x1={50} y1={50} x2={86} y2={50} />
+        {/* Cover water lines under rune nodes */}
+        <circle cx={14} cy={50} r={12} fill="#164e63" />
+        <circle cx={50} cy={14} r={12} fill="#164e63" />
+        <circle cx={50} cy={86} r={12} fill="#164e63" />
+        <circle cx={86} cy={50} r={12} fill="#164e63" />
+        <circle cx={50} cy={50} r={10} fill="#0d9488" />
       </svg>
 
       <button
         type="button"
-        className="absolute left-1/2 top-1/2 z-20 h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-600 text-[10px] font-bold leading-tight text-white shadow-lg transition hover:bg-teal-500 active:scale-95 disabled:opacity-40 sm:h-14 sm:w-14 sm:text-xs"
+        className="absolute left-1/2 top-1/2 z-30 h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-600 text-[10px] font-bold leading-tight text-white shadow-lg transition hover:bg-teal-500 active:scale-95 disabled:opacity-40 sm:h-14 sm:w-14 sm:text-xs"
         disabled={disabled}
         onClick={onCenter}
       >
@@ -133,25 +139,25 @@ function DiamondCluster({
       </button>
 
       <div
-        className={`${glyphClass} absolute left-[14%] top-1/2 z-10 -translate-x-1/2 -translate-y-1/2`}
+        className={`${glyphClass} absolute left-[14%] top-1/2 z-20 -translate-x-1/2 -translate-y-1/2`}
         aria-hidden
       >
         {glyphs.west}
       </div>
       <div
-        className={`${glyphClass} absolute left-1/2 top-[14%] z-10 -translate-x-1/2 -translate-y-1/2`}
+        className={`${glyphClass} absolute left-1/2 top-[14%] z-20 -translate-x-1/2 -translate-y-1/2`}
         aria-hidden
       >
         {glyphs.north}
       </div>
       <div
-        className={`${glyphClass} absolute left-1/2 top-[86%] z-10 -translate-x-1/2 -translate-y-1/2`}
+        className={`${glyphClass} absolute left-1/2 top-[86%] z-20 -translate-x-1/2 -translate-y-1/2`}
         aria-hidden
       >
         {glyphs.south}
       </div>
       <div
-        className={`${glyphClass} absolute left-[86%] top-1/2 z-10 -translate-x-1/2 -translate-y-1/2`}
+        className={`${glyphClass} absolute left-[86%] top-1/2 z-20 -translate-x-1/2 -translate-y-1/2`}
         aria-hidden
       >
         {glyphs.east}

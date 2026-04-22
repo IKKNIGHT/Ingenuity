@@ -114,6 +114,12 @@ export default class IngenuityRoom implements Party.Server {
     }
 
     if (msg.type === "join") {
+      // Prevent late joins after game has started
+      if (this.phase !== "lobby" && !this.players.has(sender.id)) {
+        this.whisperError(sender.id, "Game has already started");
+        return;
+      }
+
       const name = safeName(msg.name);
       if (!this.players.has(sender.id)) {
         if (this.hostId === null) {
@@ -276,6 +282,11 @@ export default class IngenuityRoom implements Party.Server {
     if (p) p.disconnected = true;
 
     if (conn.id === this.hostId) {
+      // If host leaves during playing, end the game immediately
+      if (this.phase === "playing") {
+        this.finalizeGame();
+      }
+      
       this.hostId = null;
       const next = [...this.players.entries()].find(
         ([id, pl]) => id !== conn.id && !pl.disconnected,
@@ -352,14 +363,23 @@ export default class IngenuityRoom implements Party.Server {
     const roomCode = this.roomId ?? "";
 
     const playersOut: SnapshotMessage["players"] = {};
+    const youPlayer = this.players.get(forYouId ?? "");
+
     for (const [id, pl] of this.players) {
+      // During playing phase, hide other players' states from competing players
+      // Spectators and the player themselves can see all states
+      let state = pl.state ? cloneState(pl.state) : null;
+      if (this.phase === "playing" && youPlayer?.participates && id !== forYouId) {
+        state = null;
+      }
+
       playersOut[id] = {
         name: pl.name,
         isHost: id === this.hostId,
         participates: pl.participates,
         moveCount: pl.moveCount,
         solved: pl.solvedAt !== null,
-        state: pl.state ? cloneState(pl.state) : null,
+        state,
         disconnected: pl.disconnected,
       };
     }
