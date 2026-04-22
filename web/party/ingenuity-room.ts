@@ -86,6 +86,7 @@ function safeName(raw: string): string {
 export default class IngenuityRoom implements Party.Server {
   constructor(readonly room: Party.Room) {}
 
+  private roomId: string | null = null;  // ADD THIS
   private phase: Phase = "lobby";
   private hostId: string | null = null;
   private config: GameConfig = { ...DEFAULT_CONFIG };
@@ -95,10 +96,12 @@ export default class IngenuityRoom implements Party.Server {
   private standings: StandingRow[] | null = null;
 
   onConnect(conn: Party.Connection) {
+    this.roomId = this.room.id;
     this.sendTo(conn.id, this.buildSnapshot(conn.id));
   }
 
   onMessage(raw: string | ArrayBuffer | ArrayBufferView, sender: Party.Connection) {
+    this.roomId = this.room.id;
     if (this.tickTimer()) return;
 
     let msg: ClientMessage;
@@ -346,7 +349,7 @@ export default class IngenuityRoom implements Party.Server {
 
   private buildSnapshot(forYouId?: string): SnapshotMessage {
     const now = Date.now();
-    const roomCode = this.room.id;
+    const roomCode = this.roomId ?? "";
 
     const playersOut: SnapshotMessage["players"] = {};
     for (const [id, pl] of this.players) {
@@ -388,4 +391,3 @@ export default class IngenuityRoom implements Party.Server {
   }
 }
 
-export default IngenuityRoom satisfies Party.Worker;

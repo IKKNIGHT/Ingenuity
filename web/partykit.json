@@ -1,5 +1,8 @@
 {
   "name": "ingenuity",
   "main": "party/index.ts",
+  "parties": {
+    "ingenuity": "party/index.ts"
+  },
   "compatibilityDate": "2024-12-01"
 }
