@@ -1,5 +1,5 @@
 {
   "name": "ingenuity",
-  "main": "party/index.ts",
+  "main": "party/ingenuity-room.ts",
   "compatibilityDate": "2024-12-01"
 }
