@@ -117,7 +117,7 @@ export function SinglePlayer({ onBack }: Props) {
           </h1>
           <p className="mt-1 max-w-prose text-sm text-slate-400">
             Reach the trial pattern using Left, Right, and Swap. Keyboard: ← → Space. Peek at the goal
-            layout anytime — multiplayer has no spoiler.
+            layout anytime.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-sm">
